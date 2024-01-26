@@ -12,20 +12,34 @@ body {
     height: 100vh;
     background-color: #222;
     color: white;
-}
-
-main {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.cost {
-    font-size: ;
-    display: inline-flex;
-    margin: 0 120px;
-    font-size: 1rem;
+header {
+    display: flex;
+    width: 100%;
+    margin-top: -100px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#luckyText {
+    margin-left: 2.5em;
+    font-size: 0.8rem;
+}
+#reset {
+    margin-top: 1.2em;
+}
+
+#display {
+    margin-bottom: 2em;
+}
+
+#counter {
+    margin-top: 1em;
 }
 
 .btn {
@@ -39,7 +53,8 @@ main {
     height: 75px;
     max-width: 100%;
     max-height: 100%;
-    margin: 2rem;
+    margin: 1rem;
+    margin-bottom: 20px;
     border: none;
     background-size: cover;
     cursor: pointer;
@@ -89,8 +104,21 @@ main {
                 -3px 3px var(--shadow-color),
                 -6px 0px var(--shadow-color);
 }
+#x {
+    display: flex;
+    justify-content: space-between;
+    width: 400px;
+    margin-left: 130px;
+}
+.mini {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 0;
+    font-size: 15px;
+}
 
-#display,
-#counter {
-    height: 32px;
+.cost {
+    display: inline-flex;
+    margin: 0 80px;
+    font-size: 1rem;
 }
