@@ -1,78 +1,179 @@
-let TIMEOUT = 5000;
+let TIMEOUT = Number(localStorage.getItem("timeout"));
 
-let clicks = 0;
-let profit = 1;
+let clicks = Number(localStorage.getItem("clicks"));
+let profit = Number(localStorage.getItem("profit"));
 let rundNum = 0;
 let doubleFlag = false;
 
 
+const reset = document.querySelector('#reset');
+const luckyText = document.querySelector('#luckyText');
 const display = document.querySelector('#display');
 const profitText = document.querySelector('#prof');
 const button = document.querySelector('#button');
+const counter = document.querySelector('#counter');
 const double = document.querySelector('#double');
 const upgrade = document.querySelector('#upgrade');
 const lucky = document.querySelector('#lucky');
-const counter = document.querySelector('#counter');
+const miniU = document.querySelector('#miniU');
+const miniL = document.querySelector('#miniL');
+let costD = document.querySelector('.d').textContent.slice(1);
+let costU = document.querySelector('.u').textContent.slice(1);
+let costL = document.querySelector('.l').textContent.slice(1);
 
-button.onclick = start;
+
+
+start();
 
 function start() {
-  button.onclick = () => counter.textContent = clicks += profit;
+  button.onclick = () => click();
   double.onclick = () => doubleClick();
   upgrade.onclick = () => upgradeClick();
   lucky.onclick = () => luckyClick();
-  profitText.textContent = profit;
+  reset.onclick = () => resetAll();
+  miniU.onclick = () => U();
+  miniL.onclick = () => L();
+  profitText.textContent = "Power: " + profit;
+  display.textContent = "Time: " + localStorage.getItem("timeout");
+  formatClicks();
+}
+
+function U() {
+  for (let i = 0; i < 5; i++) {
+    upgradeClick();
+  }
+}
+
+function L() {
+  for (let i = 0; i < 5; i++) {
+    luckyClick();
+  }
 }
 
 function formatTime(ms) {
   return Number.parseFloat(ms / 1000).toFixed(2);
 }
 
-function upgradeClick() {
-  profit += 1;
-  counter.textContent = clicks -= 50;
-  profitText.textContent = profit;
-}
-
-function luckyClick() {
-  rundNum = Math.floor(1 + (Math.random() * 3));
-  counter.textContent = clicks -= 100;
-  switch (rundNum) {
-    case 1:
-      profit += 10;
-      profitText.textContent = profit;
-      break;
-    case 2:
-      counter.textContent = clicks -= 50;
-      break;
-    case 3:
-      counter.textContent = clicks += 40;
-      TIMEOUT += 1000;
-      doubleClick();
-  }  
+function click() {
+  clicks += profit;
+  formatClicks();
 }
 
 function doubleClick() {
-  if (doubleFlag == false){
-    profit *= 2;
-    counter.textContent = clicks -= 40;
+  if (clicks >= costD) {
+    if (doubleFlag == false){
+      profit *= 2;
+      clicks -= costD;
+      formatClicks();
+      saveProfit();
 
-    display.textContent = formatTime(TIMEOUT);
-    const startTime = Date.now();
-    const interval = setInterval(() => {
-      const delta = Date.now() - startTime;
-      display.textContent = formatTime(TIMEOUT - delta);
-    }, 100);
+      display.textContent = "Time: " + TIMEOUT;
+      const startTime = Date.now();
+      const interval = setInterval(() => {
+        const delta = Date.now() - startTime;
+        display.textContent = "Time: " + formatTime(TIMEOUT - delta);
+      }, 100);
 
-    const timeout = setTimeout(() => {
-      display.textContent = '';
-      clearInterval(interval);
-      clearTimeout(timeout);
-      doubleFlag = false;
-      profit /= 2;
-      //double.onclick = start;
-    }, TIMEOUT);
+      const timeout = setTimeout(() => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+        display.textContent = "Time: " + TIMEOUT;
+        doubleFlag = false;
+        profit /= 2;
+        saveProfit();
+      }, TIMEOUT);
+    }
+
+    doubleFlag = true;
   }
+  else {
+    alert("Sorry, You have not ehough clicks. Need at least 40");
+  }
+}
 
-  doubleFlag = true;
+function upgradeClick() {
+  if (clicks >= costU) {
+    profit += 1;
+    profitText.textContent = "Power: " + profit;
+    clicks -= costU;
+    formatClicks();
+    saveProfit();
+  }
+  else {
+    alert("Sorry, You have not ehough clicks. Need at least 50");
+  }
+}
+
+function luckyClick() {
+  if (clicks >= costL) {
+    rundNum = Math.floor(1 + (Math.random() * 5));
+    switch (rundNum) {
+      case 1:
+        profit += 5;
+        profitText.textContent = "Power: " + profit;
+        luckyText.textContent = "Power+5";
+        break;
+      case 2:
+        clicks -= 1500;
+        formatClicks();
+        luckyText.textContent = "Clicks-1500";
+        break;
+      case 3:
+        TIMEOUT += 200;
+        saveTimeout();
+        display.textContent = "Time: " + TIMEOUT;
+        luckyText.textContent = "Time+100";
+        break;
+      case 4:
+        TIMEOUT -= 100;
+        saveTimeout();
+        display.textContent = "Time: " + TIMEOUT;
+        luckyText.textContent = "Time-200";
+        break;
+      case 5:
+        clicks += 1000;
+        luckyText.textContent = "Clicks+1000";
+        break;
+    } 
+    clicks -= costL; 
+    formatClicks();
+  }
+  else {
+    alert("Sorry, You have not ehough clicks. Need at least 100");
+  }
+}
+
+
+
+function saveTimeout() {
+  localStorage.setItem("timeout", TIMEOUT);
+}
+function saveProfit() {
+  localStorage.setItem("profit", profit);
+}
+function formatClicks() {
+  if (clicks >= 1000000) {
+    counter.textContent = Math.round(clicks/1000000) + "m " + Math.round((clicks % 1000000)/1000) + "k";
+  }
+  else if (clicks >= 1000) {
+    counter.textContent = Math.round((clicks/1000)) + "k";
+  }
+  else {
+    counter.textContent = clicks;
+  }
+  localStorage.setItem("clicks", clicks);
+}
+
+function resetAll() {
+  TIMEOUT = 3000;
+  saveTimeout();
+  display.textContent = "Time: " + 3000;
+  profit = 1;
+  saveProfit();
+  profitText.textContent = "Power: " + 1;
+  clicks = 0;
+  formatClicks();
+  let costD = document.querySelector('.d').textContent.slice(1);
+  let costU = document.querySelector('.u').textContent.slice(1);
+  let costL = document.querySelector('.l').textContent.slice(1);
 }
