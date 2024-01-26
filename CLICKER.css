@@ -106,14 +106,20 @@ header {
 }
 #x {
     display: flex;
-    justify-content: space-between;
-    width: 400px;
-    margin-left: 130px;
+    width: 500px;
+    margin-left: 100px;
+
+}
+#xu, #xl{
+    display: flex;
+    margin: 0;
+    margin: 0 0 0 100px;
 }
 .mini {
-    width: 35px;
+    width: 80px;
     height: 35px;
-    margin-bottom: 0;
+    margin: 50px 10px;
+    margin-bottom: -10px;
     font-size: 15px;
 }
 
