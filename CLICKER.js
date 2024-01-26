@@ -165,7 +165,10 @@ function saveProfit() {
   localStorage.setItem("profit", profit);
 }
 function formatClicks() {
-  if (clicks >= 1000000) {
+  if (clicks >= 1000000000) {
+    counter.textContent = Math.round(clicks/1000000000) + "b " + Math.round((clicks % 1000000000)/1000000) + "m " + Math.round((clicks % 1000000)/1000) + "k";
+  }
+  else if (clicks >= 1000000) {
     counter.textContent = Math.round(clicks/1000000) + "m " + Math.round((clicks % 1000000)/1000) + "k";
   }
   else if (clicks >= 1000) {
