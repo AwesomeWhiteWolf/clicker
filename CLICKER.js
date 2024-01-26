@@ -16,7 +16,9 @@ const double = document.querySelector('#double');
 const upgrade = document.querySelector('#upgrade');
 const lucky = document.querySelector('#lucky');
 const miniU = document.querySelector('#miniU');
+const miniU100 = document.querySelector('#miniU100');
 const miniL = document.querySelector('#miniL');
+const miniL100 = document.querySelector('#miniL100');
 let costD = document.querySelector('.d').textContent.slice(1);
 let costU = document.querySelector('.u').textContent.slice(1);
 let costL = document.querySelector('.l').textContent.slice(1);
@@ -32,7 +34,9 @@ function start() {
   lucky.onclick = () => luckyClick();
   reset.onclick = () => resetAll();
   miniU.onclick = () => U();
+  miniU100.onclick = () => U100();
   miniL.onclick = () => L();
+  miniL100.onclick = () => L100();
   profitText.textContent = "Power: " + profit;
   display.textContent = "Time: " + localStorage.getItem("timeout");
   formatClicks();
@@ -43,9 +47,18 @@ function U() {
     upgradeClick();
   }
 }
-
+function U100() {
+  for (let i = 0; i < 100; i++) {
+    upgradeClick();
+  }
+}
 function L() {
   for (let i = 0; i < 5; i++) {
+    luckyClick();
+  }
+}
+function L100() {
+  for (let i = 0; i < 100; i++) {
     luckyClick();
   }
 }
