@@ -15,6 +15,7 @@ const counter = document.querySelector('#counter');
 const double = document.querySelector('#double');
 const upgrade = document.querySelector('#upgrade');
 const lucky = document.querySelector('#lucky');
+const auto = document.querySelector('#auto');
 const miniU = document.querySelector('#miniU');
 const miniU100 = document.querySelector('#miniU100');
 const miniL = document.querySelector('#miniL');
@@ -32,6 +33,7 @@ function start() {
   double.onclick = () => doubleClick();
   upgrade.onclick = () => upgradeClick();
   lucky.onclick = () => luckyClick();
+  auto.onclick = () => autoClick();
   reset.onclick = () => resetAll();
   miniU.onclick = () => U();
   miniU100.onclick = () => U100();
@@ -156,14 +158,24 @@ function luckyClick() {
   }
 }
 
-
-
-function saveTimeout() {
-  localStorage.setItem("timeout", TIMEOUT);
+function autoClick() {
+  if (clicks >= 10000000) {
+    const intervalId = setInterval(function() {
+      click();
+      if (clicks >= costU * 100) 
+        U100();
+      else if (clicks >= costU) {
+        upgradeClick();
+      }
+      if (clicks >= costD)
+        doubleClick();
+      if (clicks >= costL)
+        luckyClick();
+    }, 250)
+    clicks -= 10000000;
+  }
 }
-function saveProfit() {
-  localStorage.setItem("profit", profit);
-}
+
 function formatClicks() {
   if (clicks >= 1000000000) {
     counter.textContent = Math.round(clicks/1000000000) + "b " + Math.round((clicks % 1000000000)/1000000) + "m " + Math.round((clicks % 1000000)/1000) + "k";
@@ -180,6 +192,13 @@ function formatClicks() {
   localStorage.setItem("clicks", clicks);
 }
 
+function saveTimeout() {
+  localStorage.setItem("timeout", TIMEOUT);
+}
+function saveProfit() {
+  localStorage.setItem("profit", profit);
+}
+
 function resetAll() {
   TIMEOUT = 3000;
   saveTimeout();
@@ -189,7 +208,7 @@ function resetAll() {
   profitText.textContent = "Power: " + 1;
   clicks = 0;
   formatClicks();
-  let costD = document.querySelector('.d').textContent.slice(1);
-  let costU = document.querySelector('.u').textContent.slice(1);
-  let costL = document.querySelector('.l').textContent.slice(1);
+  const costD = document.querySelector('.d').textContent.slice(1);
+  const costU = document.querySelector('.u').textContent.slice(1);
+  const costL = document.querySelector('.l').textContent.slice(1);
 }
